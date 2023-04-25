@@ -15,18 +15,18 @@ resource "google_project_service" "cloudbuild" {
   ]
 }
 
-resource "google_project_service" "iam" {
+resource "google_project_service" "artifactregistry" {
   project            = var.project_id
-  service            = "iam.googleapis.com"
+  service            = "artifactregistry.googleapis.com"
   disable_on_destroy = false
   depends_on = [
     google_project_service.cloudresourcemanager,
   ]
 }
 
-resource "google_project_service" "cloudrun" {
+resource "google_project_service" "iam" {
   project            = var.project_id
-  service            = "run.googleapis.com"
+  service            = "iam.googleapis.com"
   disable_on_destroy = false
   depends_on = [
     google_project_service.cloudresourcemanager,
@@ -42,12 +42,11 @@ resource "google_project_service" "secretmanager" {
   ]
 }
 
-resource "google_project_service" "artifactregistry" {
+resource "google_project_service" "cloudrun" {
   project            = var.project_id
-  service            = "artifactregistry.googleapis.com"
+  service            = "run.googleapis.com"
   disable_on_destroy = false
   depends_on = [
     google_project_service.cloudresourcemanager,
   ]
 }
-
