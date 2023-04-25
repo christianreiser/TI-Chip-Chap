@@ -7,25 +7,33 @@ import json
 os.environ["OPENAI_API_KEY"] = os.getenv("openai_api_key")
 
 
-def read_json_from_bucket(bucket_name, file_name):
-    client = storage.Client()
-    bucket = client.get_bucket(bucket_name)
-    blob = storage.Blob(file_name, bucket)
-    content = blob.download_as_text()
-    data = json.loads(content)
+def read_json_from_bucket_with_cache(bucket_name, file_name):
+    global json_data_cache
+    if json_data_cache is None:
+        client = storage.Client()
+        bucket = client.get_bucket(bucket_name)
+        blob = storage.Blob(file_name, bucket)
+        content = blob.download_as_text()
+        json_data_cache = json.loads(content)
 
-    return data
+    return json_data_cache
 
 
 def chatbot(input_text):
-    bucket_name = os.getenv("index_bucket_name")
-    file_path = 'index.json'  # os.environ["JSON_FILE_PATH"]
-    json_data = read_json_from_bucket(bucket_name, file_path)
-    index = GPTSimpleVectorIndex.load_from_dict(json_data)
-    response = index.query(input_text, response_mode="compact")
+    global index_cache
+
+    if index_cache is None:
+        bucket_name = os.getenv("index_bucket_name")
+        file_path = 'index.json'
+        json_data = read_json_from_bucket_with_cache(bucket_name, file_path)
+        index_cache = GPTSimpleVectorIndex.load_from_dict(json_data)
+
+    response = index_cache.query(input_text, response_mode="compact")
     return response.response
 
 
+index_cache = None
+json_data_cache = None
 iface = gr.Interface(fn=chatbot,
                      inputs=gr.components.Textbox(lines=7, label="Enter your text about Chris"),
                      outputs="text",
