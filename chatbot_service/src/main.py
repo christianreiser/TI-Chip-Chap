@@ -18,7 +18,7 @@ def read_json_from_bucket(bucket_name, file_name):
 
 
 def chatbot(input_text):
-    bucket_name = 'chris-index-file'  # 'os.environ["JSON_BUCKET_NAME"]'
+    bucket_name = os.getenv("index_bucket_name")
     file_path = 'index.json'  # os.environ["JSON_FILE_PATH"]
     json_data = read_json_from_bucket(bucket_name, file_path)
     index = GPTSimpleVectorIndex.load_from_dict(json_data)
