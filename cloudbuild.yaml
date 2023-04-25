@@ -1,0 +1,86 @@
+substitutions:
+  _ENVIRONMENT_NAME: 'dev'
+
+steps:
+  ##################################
+  ### Create Artifact Repository ###
+  ##################################
+
+  - id: deploy-artifact-repository
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        gcloud artifacts repositories create artifact-repository --repository-format=docker --location=europe-west1 || echo "artifact repository artifact-repository already exists"
+
+    waitFor: [ '-' ]
+
+  ##################################
+  ### Build & Push Docker Images ###
+  ##################################
+
+  - id: build-docker-image
+    name: gcr.io/cloud-builders/docker
+    entrypoint: docker
+    dir: 'chatbot_service'
+    args: [
+      'build',
+      '-t', 'europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service:${SHORT_SHA}',
+      '-t', 'europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service:latest',
+      '.'
+    ]
+#    [ 'build', '-t', 'gcr.io/$PROJECT_ID/chatbot', '.' ]
+    waitFor: [ 'deploy-artifact-repository' ]
+
+  - id: push-docker-image
+    name: gcr.io/cloud-builders/docker
+    entrypoint: docker
+#    args: [ 'push', 'gcr.io/$PROJECT_ID/chatbot' ]
+    args: [
+      'push', '--all-tags',
+      'europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service'
+    ]
+    waitFor: [ 'build-docker-image' ]
+
+
+  #######################
+  ### Terraform setup ###
+  #######################
+
+  - id: create-terraform-state-bucket
+    name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        gsutil ls -b 'gs://${PROJECT_ID}-terraform' || gsutil mb -l EU 'gs://${PROJECT_ID}-terraform'      
+
+    waitFor: [ '-' ] # Build immediately
+
+  - id: generate-terraform-backend
+    name: gcr.io/cloud-builders/gsutil
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        echo -e "bucket = \"${PROJECT_ID}-terraform\"" > /workspace/config.gcs.tfbackend
+        echo -e "prefix = \"${_ENVIRONMENT_NAME}\"" >> /workspace/config.gcs.tfbackend
+        echo "generated backend configuration:"
+        cat /workspace/config.gcs.tfbackend
+
+    waitFor: [ '-' ] # Build immediately
+
+  - id: initialize-terraform
+    name: hashicorp/terraform:1.4.4
+    entrypoint: terraform
+    dir: terraform
+    args: [ 'init', '-backend-config=/workspace/config.gcs.tfbackend' ]
+    waitFor: [ 'create-terraform-state-bucket', 'generate-terraform-backend' ]
+
+  - id: apply-terraform
+    name: hashicorp/terraform:1.4.4
+    entrypoint: terraform
+    dir: terraform
+    args: [ 'apply', '-auto-approve', '-var=project_id=${PROJECT_ID}' ]
+    waitFor: [ 'initialize-terraform', 'push-docker-image' ]
