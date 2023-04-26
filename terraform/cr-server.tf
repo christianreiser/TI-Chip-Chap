@@ -3,6 +3,9 @@ resource "google_cloud_run_service" "chatbot" {
   location = "europe-west1"
 
   template {
+        metadata {
+      name = "chatbot-${var.image_tag}"
+    }
 
     spec {
       service_account_name = google_service_account.chatbot-service.email
