@@ -20,28 +20,17 @@ steps:
   ### Build & Push Docker Images ###
   ##################################
 
-  - id: build-docker-image
-    name: gcr.io/cloud-builders/docker
-    entrypoint: docker
-    dir: 'chatbot_service'
-    args: [
-      'build',
-      '-t', 'europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service:${SHORT_SHA}',
-      '-t', 'europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service:latest',
-      '.'
-    ]
-    #    [ 'build', '-t', 'gcr.io/$PROJECT_ID/chatbot', '.' ]
+  - id: build-and-push-docker-image
+    name: gcr.io/kaniko-project/executor:latest
+    args:
+      - '--context=chatbot_service'
+      - '--dockerfile=chatbot_service/Dockerfile'
+      - '--destination=europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service:${SHORT_SHA}'
+      - '--destination=europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service:latest'
+      - '--cache=true'
+      - '--cache-ttl=24h'
     waitFor: [ 'deploy-artifact-repository' ]
 
-  - id: push-docker-image
-    name: gcr.io/cloud-builders/docker
-    entrypoint: docker
-    #    args: [ 'push', 'gcr.io/$PROJECT_ID/chatbot' ]
-    args: [
-      'push', '--all-tags',
-      'europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service'
-    ]
-    waitFor: [ 'build-docker-image' ]
 
 
   #######################
