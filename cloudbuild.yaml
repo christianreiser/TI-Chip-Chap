@@ -30,13 +30,13 @@ steps:
       '-t', 'europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service:latest',
       '.'
     ]
-#    [ 'build', '-t', 'gcr.io/$PROJECT_ID/chatbot', '.' ]
+    #    [ 'build', '-t', 'gcr.io/$PROJECT_ID/chatbot', '.' ]
     waitFor: [ 'deploy-artifact-repository' ]
 
   - id: push-docker-image
     name: gcr.io/cloud-builders/docker
     entrypoint: docker
-#    args: [ 'push', 'gcr.io/$PROJECT_ID/chatbot' ]
+    #    args: [ 'push', 'gcr.io/$PROJECT_ID/chatbot' ]
     args: [
       'push', '--all-tags',
       'europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service'
@@ -82,5 +82,5 @@ steps:
     name: hashicorp/terraform:1.4.4
     entrypoint: terraform
     dir: terraform
-    args: [ 'apply', '-auto-approve', '-var=project_id=${PROJECT_ID}' ]
+    args: [ 'apply', '-auto-approve', '-var=project_id=${PROJECT_ID}', '-var=image_tag=${SHORT_SHA}' ]
     waitFor: [ 'initialize-terraform', 'push-docker-image' ]

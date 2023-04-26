@@ -7,7 +7,7 @@ resource "google_cloud_run_service" "chatbot" {
     spec {
       service_account_name = google_service_account.chatbot-service.email
       containers {
-        image = "europe-west1-docker.pkg.dev/${var.project_id}/artifact-repository/chatbot-service:latest"
+        image = "europe-west1-docker.pkg.dev/${var.project_id}/artifact-repository/chatbot-service:${var.image_tag}"
         env {
           name  = "index_bucket_name"
           value = google_storage_bucket.index-file.name
