@@ -72,4 +72,4 @@ steps:
     entrypoint: terraform
     dir: terraform
     args: [ 'apply', '-auto-approve', '-var=project_id=${PROJECT_ID}', '-var=image_tag=${SHORT_SHA}' ]
-    waitFor: [ 'initialize-terraform', 'push-docker-image' ]
+    waitFor: [ 'initialize-terraform', 'build-and-push-docker-image' ]
