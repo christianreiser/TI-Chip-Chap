@@ -39,7 +39,7 @@ iface = gr.Interface(fn=chatbot,
                      outputs="text",
                      title="Chris custom-trained AI chatbot",
                      flagging_options=["bad answer", "incorrect", "good answer", "not relevant"],
-                     examples=['Who is Chris?', 'Wer ist Chris?'],
+                     examples=['welche blutwerte  hatte Christian am 2019-09-05? schreibe eine zeile pro laborident. ', 'wie ist die Persönlichkeitsstrukturvon christian?', 'wo arbeitet christian derzeit?'],
                      interpretation="default",
                      theme=gr.themes.Default(primary_hue="green", secondary_hue="blue"),
                      )
