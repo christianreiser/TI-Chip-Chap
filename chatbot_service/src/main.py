@@ -3,6 +3,7 @@ import os
 from gpt_index import GPTSimpleVectorIndex
 from google.cloud import storage
 import json
+from datetime import datetime
 
 os.environ["OPENAI_API_KEY"] = os.getenv("openai_api_key")
 
@@ -37,7 +38,7 @@ json_data_cache = None
 iface = gr.Interface(fn=chatbot,
                      inputs=gr.components.Textbox(lines=7, label="Enter your text about Chris"),
                      outputs="text",
-                     title="Chris custom-trained AI chatbot",
+                     title="Chris chatbot. last updated:" + str(datetime.now()),
                      flagging_options=["bad answer", "incorrect", "good answer", "not relevant"],
                      examples=['welche blutwerte  hatte Christian am 2019-09-05? schreibe eine zeile pro laborident. ', 'wie ist die Persönlichkeitsstrukturvon christian?', 'wo arbeitet christian derzeit?'],
                      interpretation="default",
