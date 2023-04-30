@@ -10,7 +10,8 @@ from llama_index import (
 def construct_index(directory_path):
     print('constructing index...')
     documents = SimpleDirectoryReader(directory_path).load_data()
-    llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
+    # llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
+    llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-4"))
     service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
 
     index = GPTSimpleVectorIndex.from_documents(documents, service_context=service_context)

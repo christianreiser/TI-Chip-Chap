@@ -10,8 +10,10 @@ from llama_index import (
     ServiceContext,
     GPTSimpleVectorIndex
 )
-# os.environ["OPENAI_API_KEY"] = os.getenv("openai_api_key")
-os.environ["OPENAI_API_KEY"] = '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'
+os.environ["OPENAI_API_KEY"] = os.getenv("openai_api_key")
+# os.environ["OPENAI_API_KEY"] = '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' # edialog
+# os.environ["OPENAI_API_KEY"] = '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' # chris
+
 
 
 def read_json_from_bucket_with_cache(bucket_name, file_name):
@@ -37,8 +39,9 @@ def chatbot(input_text):
         index_cache = GPTSimpleVectorIndex.load_from_dict(json_data)
     # index_cache = GPTSimpleVectorIndex.load_from_disk('indexing/index.json')
     # llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, max_tokens=900, model_name="gpt-3.5-turbo"))
+    llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, max_tokens=900, model_name="gpt-4"))
     if service_context is None:
-        llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, max_tokens=900, model_name="text-davinci-003"))
+        # llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, max_tokens=900, model_name="text-davinci-003"))
         service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor, chunk_size_limit=900)
     response = index_cache.query(response_mode="compact", query_str=input_text,service_context=service_context)
     return response.response
