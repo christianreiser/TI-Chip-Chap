@@ -50,14 +50,15 @@ def chatbot(input_text):
 index_cache, service_context, json_data_cache = None, None, None
 
 iface = gr.Interface(fn=chatbot,
-                     inputs=gr.components.Textbox(lines=7, label="Enter your text about Chris"),
+                     inputs=gr.components.Textbox(lines=7, label="Enter your text about the OPA333 here:"),
                      outputs="text",
-                     title="Chris chatbot",
+                     title="TI Searchbot",
                      description="Last updated:" + str(datetime.utcnow()) + " (UTC)",
                      flagging_options=["bad answer", "incorrect", "good answer", "not relevant"],
-                     examples=['welche blutwerte hatte Christian am 2019-09-05? z.b.HDL,LDL,NF,QCH,GT,AP,BILI,OT,...  schreibe eine zeile pro laborident. ',
-                               'was steht im Persönlichkeitsstrukturtest PST-R von Klient Reiser, Christian?',
-                               'wo arbeitet christian derzeit?'],
+                     examples=[
+                         'What is the OPA333?',
+                         'Was sind die Aanwerndungsfelder von OPA333?',
+                         'Wie viele Pins hat der OPA333 und fuer was sind sie?'],
                      interpretation="default",
                      theme=gr.themes.Default(primary_hue="green", secondary_hue="blue"),
                      )
