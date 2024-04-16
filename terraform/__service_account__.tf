@@ -9,7 +9,7 @@ resource "google_project_iam_member" "chatbot_service_bq_viewer" {
   member  = "serviceAccount:${google_service_account.chatbot-service.email}"
 }
 
-resource "google_project_iam_member" "chatbot_service_bq_viewer" {
+resource "google_project_iam_member" "chatbot_service_bq_user" {
   project = "chatbot-420"
   role    = "roles/bigquery.jobUser"
   member  = "serviceAccount:${google_service_account.chatbot-service.email}"
