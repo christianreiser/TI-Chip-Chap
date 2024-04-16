@@ -15,7 +15,7 @@ print(llm.predict('3+3='))
 client = bigquery.Client()
 
 generation_model = TextGenerationModel.from_pretrained("text-bison@001")
-dataset_full_id = 'e-dialog-gen-ai.info_bot'
+dataset_full_id = 'chatbot-420.info_bot'
 
 
 def prompt2txt(prompt):
@@ -186,9 +186,9 @@ def answer_question(question):
         return fallback_message, None
     else:
         schema = get_schema(table_full_id)
-        example = f"""SELECT Product_or_Part_number, Slew_rate_in_V_per___s FROM `e-dialog-gen-ai.info_bot.op-amps`  where Rating like '%Automotive%' and Type like '%Power op amps%' order by Slew_rate_in_V_per___s asc limit 10;
+        example = f"""SELECT Product_or_Part_number, Slew_rate_in_V_per___s FROM `chatbot-420.info_bot.op-amps`  where Rating like '%Automotive%' and Type like '%Power op amps%' order by Slew_rate_in_V_per___s asc limit 10;
         or
-        SELECT GBW_in_MHz FROM `e-dialog-gen-ai.info_bot.op-amps` where Product_or_Part_number ='OPA2863-Q1';"""
+        SELECT GBW_in_MHz FROM `chatbot-420.info_bot.op-amps` where Product_or_Part_number ='OPA2863-Q1';"""
 
         question_to_sql_prompt = f"""
         Please write BigQuery SQL that answers question: {question}. 
