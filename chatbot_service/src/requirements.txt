@@ -1,9 +1,7 @@
-gradio==3.27.0
-# html2text==2020.1.16
-google-cloud-storage==2.8.0
-# git+https://github.com/openai/whisper.git
-# PyPDF2==3.0.1
-# transformers==4.28.1
-# sentencepiece==0.1.98
-# docx2txt
-llama_index==0.5.25
+gradio
+google-cloud-storage
+langchain
+openai
+google-cloud-aiplatform
+google-cloud-bigquery
+db-dtypes
