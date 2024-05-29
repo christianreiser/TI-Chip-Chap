@@ -6,11 +6,7 @@ import gradio as gr
 
 from langchain.chat_models import ChatOpenAI
 
-os.environ["OPENAI_API_KEY"] = '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'
-llm = ChatOpenAI(temperature=0.0, model_name="gpt-3.5-turbo")
-llm = ChatOpenAI(temperature=0.0, model_name="gpt-4")
-print(llm)
-print(llm.predict('3+3='))
+
 
 client = bigquery.Client()
 
@@ -20,10 +16,7 @@ dataset_full_id = 'chatbot-420.info_bot'
 
 def prompt2txt(prompt):
     llm_provider = 'google'
-    if llm_provider == 'openai':
-        return llm.predict(prompt)
-    elif llm_provider == 'google':
-        return generation_model.predict(
+    return generation_model.predict(
             prompt,
             temperature=0.0,
             max_output_tokens=128,
