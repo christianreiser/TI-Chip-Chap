@@ -1,6 +1,7 @@
 gradio
 google-cloud-storage
 langchain
+langchain-community
 openai
 google-cloud-aiplatform
 google-cloud-bigquery
