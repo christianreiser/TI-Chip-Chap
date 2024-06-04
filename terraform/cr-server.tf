@@ -17,13 +17,8 @@ resource "google_cloud_run_service" "chatbot" {
         }
 
         env {
-          name  = "openai_api_key"
-          value_from {
-            secret_key_ref {
-              key  = "latest"
-              name = "openai_api_key"
-            }
-          }
+          name  = "OPENAI_API_KEY"
+          value = var.openai_id
         }
       }
     }
