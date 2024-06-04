@@ -1,5 +1,7 @@
 substitutions:
   _ENVIRONMENT_NAME: 'dev'
+  _OPENAI_ID_: '${_OPENAI_ID_}'
+
 
 steps:
   ##################################
