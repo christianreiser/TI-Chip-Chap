@@ -29,7 +29,8 @@ steps:
       - '--destination=europe-west1-docker.pkg.dev/${PROJECT_ID}/artifact-repository/chatbot-service:latest'
       - '--cache=true'
       - '--cache-ttl=24h'
-      - '--build-arg=OPENAI_ID=${_OPENAI_ID_}' 
+    env:
+      - 'OPENAI_ID=${_OPENAI_ID_}'
 
     waitFor: [ 'deploy-artifact-repository' ]
 

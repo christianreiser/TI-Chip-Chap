@@ -7,4 +7,6 @@ RUN pip install -r requirements.txt # --no-cache-dir
 
 COPY src/ /app/src/
 
+ENV OPENAI_ID=${OPENAI_ID}
+
 CMD ["python", "src/main.py"]

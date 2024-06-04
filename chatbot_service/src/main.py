@@ -6,7 +6,7 @@ import gradio as gr
 
 from langchain.chat_models import ChatOpenAI
 
-os.environ["OPENAI_API_KEY"] = os.environ.get('OPENAI_ID')
+os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_ID')
 if os.environ["OPENAI_API_KEY"] is None:
     raise ValueError("OPENAI_API_KEY environment variable not set")
     
