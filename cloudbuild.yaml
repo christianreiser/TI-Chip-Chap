@@ -76,5 +76,5 @@ steps:
     name: hashicorp/terraform:1.4.4
     entrypoint: terraform
     dir: terraform
-    args: [ 'apply', '-auto-approve', '-var=project_id=${PROJECT_ID}', '-var=image_tag=${SHORT_SHA}' ]
+    args: [ 'apply', '-auto-approve', '-var=project_id=${PROJECT_ID}', '-var=image_tag=${SHORT_SHA}', '-var=openai_id=${_OPENAI_ID_}' ]
     waitFor: [ 'initialize-terraform', 'build-and-push-docker-image' ]
