@@ -1,5 +1,5 @@
 # Texas Instruments Chip Chap
 Ask any question about any of the 80,000 products of Texas Instruments. Ask for product comparisons.
-[Link to Chat](https://tibot.insightme.org/)
+The demo is retired (October 2026); tibot.insightme.org no longer exists.
 
-Commits to main branch trigger cloud builds.
+Commits to main branch used to trigger cloud builds; the Cloud Run service is deleted.
